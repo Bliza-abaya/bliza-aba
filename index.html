@@ -150,28 +150,168 @@
     .card-name{font-size:13px}
     .mgrid{grid-template-columns:1fr}
   }
+
+  /* ── CART ── */
+  .cart-overlay{display:none;position:fixed;inset:0;background:rgba(28,15,27,.6);z-index:600;
+    align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
+  .cart-overlay.open{display:flex}
+  .cart-modal{background:var(--white);border-radius:28px 28px 0 0;width:100%;max-width:520px;
+    max-height:92vh;overflow-y:auto;padding:24px 20px 40px;animation:slideUp .3s ease}
+  .cart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+  .cart-title{font-size:19px;font-weight:900;color:var(--brand)}
+  .cart-empty{text-align:center;padding:40px 20px;color:var(--gray)}
+  .cart-empty-icon{font-size:48px;margin-bottom:12px}
+  .cart-item{display:flex;gap:12px;align-items:flex-start;padding:14px 0;
+    border-bottom:1px solid var(--border)}
+  .cart-item-img{width:60px;height:78px;border-radius:10px;overflow:hidden;flex-shrink:0;background:#f0e8ef}
+  .cart-item-img img{width:100%;height:100%;object-fit:cover;object-position:top}
+  .cart-item-info{flex:1}
+  .cart-item-name{font-size:14px;font-weight:700;color:var(--brand);margin-bottom:3px}
+  .cart-item-color{font-size:12px;color:var(--gray);margin-bottom:6px}
+  .cart-item-price{font-size:14px;font-weight:800;color:var(--brand)}
+  .cart-item-remove{background:#fee2e2;color:#dc2626;border:none;border-radius:8px;
+    padding:5px 10px;font-size:11px;cursor:pointer;font-family:inherit;font-weight:600}
+  .cart-total{display:flex;justify-content:space-between;align-items:center;
+    padding:16px 0;font-size:16px;font-weight:800;color:var(--brand);
+    border-top:2px solid var(--border);margin-top:4px}
+  .cart-checkout-btn{width:100%;padding:15px;background:var(--brand);color:#fff;
+    border:none;border-radius:13px;font-size:15px;font-weight:800;cursor:pointer;
+    font-family:inherit;margin-top:14px;transition:background .2s}
+  .cart-checkout-btn:hover{background:var(--mid)}
+  .cart-continue{width:100%;padding:12px;background:var(--gray100);color:var(--gray600);
+    border:none;border-radius:13px;font-size:14px;font-weight:600;cursor:pointer;
+    font-family:inherit;margin-top:8px}
+  .add-cart-btn{background:var(--gray100);color:var(--brand);border:none;border-radius:10px;
+    padding:9px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;
+    transition:background .2s;white-space:nowrap}
+  .add-cart-btn:hover{background:var(--light)}
+  /* Floating cart button */
+  .float-cart{position:fixed;bottom:24px;left:20px;z-index:400;
+    background:var(--brand);color:#fff;border:none;border-radius:50px;
+    padding:12px 20px;font-size:14px;font-weight:700;cursor:pointer;
+    font-family:inherit;box-shadow:0 4px 20px rgba(74,25,66,.4);
+    display:none;align-items:center;gap:8px;transition:transform .2s}
+  .float-cart.visible{display:flex}
+  .float-cart:hover{transform:translateY(-2px)}
+
+  
+
 </style>
 </head>
 <body>
+
+  <!-- Avatar -->
+  <div class="profile-avatar-wrap">
+    <div class="profile-avatar">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAIAAAC2BqGFAAABWGlDQ1BJQ0MgUHJvZmlsZQAAeJx9kLFLw1AQxr9WpaB1EB0cHDKJQ5SSCro4tBVEcQhVweqUvqapkMZHkiIFN/+Bgv+BCs5uFoc6OjgIopPo5uSk4KLleS+JpCJ6j+N+fO+74zggOW5wbvcDqDu+W1zKK5ulLSX1jAS9IAzm8Zyur0r+rj/j/T703k7LWb///43Biukxqp+UGcZdH0ioxPqezyXvE4+5tBRxS7IV8onkcsjngWe9WCC+JlZYzagQvxCr5R7d6uG63WDRDnL7tOlsrMk5lBNYxA48cNgw0IQCHdk//LOBv4BdcjfhUp+FGnzqyZEiJ5jEy3DAMAOVWEOGUpN3ju53F91PjbWDJ2ChI4S4iLWVDnA2Rydrx9rUPDAyBFy1ueEagdRHmaxWgddTYLgEjN5Qz7ZXzWrh9uk8MPAoxNskkDoEui0hPo6E6B5T8wNw6XwBA6diE8HYWhMAAAn7SURBVHic7ZxrbFPXHcDPOffa17HjJM2aVQ0rFe2EHzcZq7ppq7S1FE3VPlT0gVQgkBDCvk2dwCQQwPErCW0HebIvk6CEBMLjAwNNZVVXoWkbm9R+GIX42glMwDpaQqArC3bs+Dz24STGZUylDx9fe+f3Kbm5Uo5/+d///38eN5AxBiT5BxV6AP8vSNGCkKIFIUULQooWhBQtCClaEFK0IKRoQUjRgpCiBSFFC0KKFoQULQgpWhBStCCkaEFI0YKQogUhRQtCihaEFC0IKVoQUrQgpGhBSNGCkKIFIUULQooWhBQtCClaEFK0IKRoQUjRgpCiBaEWegCfAwMAMAYAgBAWeixfCVNHNKUUAgAhhBAW+0tN5hVNCEEIpdPpycnr09PTMqLzAiFEUZQLFy+ubGh8zOV9ZtlzZ878FQBQxHHNzAfGmDEWjRrfeeL7QCmrrH4IqmXf/d4P/z09XeihfXlMF9E8ls+PRRuamo1YvKqqghBSUeG8cOFCIpkERRvU5hLNLUeNWFPzBiMaK3c4MCaKoty6Nb3s2WerKipA0bYfJqrmmBBVUeLx8VVrmqLRmMNhJ4SoqppIJDxez7HRYZfLRSlFyCzBQSlDCF66fPn06T9YLJZck4yxJ598or6uLnvFLH00IURVlPHxiZUNjYYRs9vtPLoTiYSue4f37zWbZQAApQQh9fz5sa3b/U6nk1KSVY0x2dHeVl9Xxxjjj6ApRM9ljKjR0LjeMOJlZWXcaSKR0L3e4aF99XU6oVQxk+UsqXT65tSN2fQspTQb1Bjj5Ewy97bCi+YZ4/xYtLG5JRabyxgIoWQy6fV4jowecLvd/C9R6JHeGwghUhRFUXJnVdlAzlLgGMEYq4piGLHGdS3RqOFwOLjTZDKp654jo8Mmt8y5Zz931z2FFM1rXXx8fHXjumjUcNgdGGNVVRPJhK7rh4aHPB43xtjklu+TgonmcTo+PrFydaMRvbv6jRzYp+teTIiqFj65fS0URjR3OhY1XmlYy3sMSimEMJFIejyeQwf219fpvA8pyPDyQQHiZc7yWLSxeUPMiPO8PFf9vJ5jh0dcrsXmz8tfFNERzXOuEYutbb6r+s3ouvfo6IjLtRiXnGVKqVDRc9UvPrF67bromGG3l/Hql0wm6+q8h0aG3G5XiWWMuRUlhMSljjvVbz4vE0IVBd1OJHTdMzy0T/d6SjBjIAQA+PDDfwoSnV2TW9vUEjPivPohCBOJGa/XPTo85C05y7yXTiVn3j19eu+bQyJE8/wwFjWamjfEYjF77tzP6zl6eMTtcpWeZQAABGD06LHOrp3Xp6bynqO5ZSMWX9u0fmws6pjvl5PJpFf3HhkdLj3LAAAGgE2znf3ggzd29Xz00cdWizW/EU0oVVU1Pj6xek2TYcTtdjsmRFWVRCJZV6cfPPCmx+3mf4m8DkM8FlW9dOXKH/985uLFv1dWVlBC8/gJeZzG4vFVDU3ZWQlC6Pbt5Fz1072khOZ+uSCETpz87c2bN8sdjtRMKo9dR7b6Na5rMbLVbz4vHz50wFMMq0VfGsbYtY+vqaqaTqcXPvrI0qd/nBfRlFJFUaKG0dTcYhix8nI7xgQAkEgkdd1z9PBBt2sxobRULXOsFms6k3a5Fnf4t//0uZ98/aJ5f/7pp7e2bvOfPXuuqqoKYwwhJITU1+sHh/e7XYtLMi/nAiFMz87W1NR0hoMvLH8e5GMKzjubq1ev/u7tdx6oqiKEcMuVlZX79/5a93oymUxpW+YwRl9+cfkLy59njOVxCu50ltfWPpxKp/m+A0JoZmbm+ImThFCEkHl2hPMBhDCTyVRXVzc1rQF8oSMfe50IIUrpggULOra3E0IopQhBCOHs7OzO13b5A8HSTs0cQsiiRY8uWbKEMcY/b14imm+Xtaxf19UZJIQQQiGEiqLY7WU9vQPtOzr4DaUa13zDUPd6lJxnN1+iEUIIobbNvnDQTxkjhPAfaZrW2ze4dZufEMKTVz4GUHAghLW1tfwrfiVfRYmftQUAtLX6AELBYBgCCBGEEGpWa//AHghBVySUe2cpASGsrKwAAGQ/WN6rPyGkzbcRAuAPRFSAEEIQQh7XAMLXuzoJJfxivkcimFRqNvfbvItGCGGMW30bGWOBYCeYX6K12Ww9vQMQgNe6OwEAjIFSUk0pvXFjCuQc8Mj76h0vgxjjts0bwyE/pZQSyn93mab19A62b/cDACAsndrIO9qJCxdzL4rYyuKuKWVbWn3hUAcFdK42Qqhp1t7+PVu37eBnokumNkII4+MTk5PXwXxzJWjPkPchAIC2zZsioQChhM2/AqRZrX0De/yBMKEk9/haUWOxWCavTR7/zUmEEI8qoZuzjDFCSKtvYyQcwAQzRgEAEEKbZuvpG+wIhBVVued5quKCz4RTqdTwyKHLV/6hqiohRKhoHtcY4zbfpnAwQMid+C2zab19g9u2d/AOpARc22y2c2PnA4HwpUuXFUURvbiTrY1bWjcBwMKRbn6FMaZpWl//HgbAGzu7uOui7vkYYwpSjp84kZhJrnjpxQKsomXNbmn1QQSD8z0fhNBqtfb372GMdUdCfImgeF3z7IyQ8tapt9977/3CnL3LvqPZ5tsUCX+2Nmpa/8Cv/IEwpbR4ayOE8KmnflBb+3Amk9Gs1k8++VeBz0fP18YgxpjN93Y2TevrH/QHQjzwi9E1xnjZ0qW/ePXnfH6gqkohRfPamMG4zbcxHO7AlGb7aJvN1ts/2L6tOGoj/C8YY1bN8rOW5hUrXpqZmSF53QW/zyGqvDZu9gEGQpFuMP9GkGbV+gYGGWCv7+w0c22kjNFMJpPJ3PUOSyqVstlsO9q3lpc73zp1qvBbSp+pjRAFQxGQWxsH9jDAuiMhpCjIlLXRpmnVNTVOpzNXNCG43FHOGHO7Xd2doWee/pGJnkoes7t7+zsCYUVREZpzmkqlfZtejYQCqqqaak2VD3jq+tRY1OBTrdwfPbZo0cKFj9x5EO/7Zea8QynNZDBj7Je7e22OqvLKByse+KazqsZZVYOsjp6+Ab4xVuhhfmF4+2SiiAYAMMYwxhaLZdfu3mCkC0HEswqltLKq8tzf3v9GdTUzWbJm/2MtDCKEcsZZ+BydC4RQVVVKaVurjwEQCncRQux2ezqdTqVS5lzb4zXm8+8r6FN1b7L5YXdv/4MPfQsAVbU5O4KRTCZT0HF9JcyVOnJhjEEI3/n9u38685dvP/54w6pX+Ivtpsob9495RYP5k5KFHsXXg6lFAwAwxpRSCJGqKkUayxyziy4ZzPiPGUoSKVoQUrQgpGhBSNGCkKIFIUULQooWhBQtCClaEFK0IKRoQUjRgpCiBSFFC0KKFoQULQgpWhBStCCkaEFI0YKQogUhRQtCihaEFC0IKVoQUrQgpGhB/AfqlxNw9mSxngAAAABJRU5ErkJggg==" alt="Bliza Logo">
+    </div>
+  </div>
+
+  <!-- Name -->
+  <div class="profile-name">Bliza Abaya</div>
+  <div class="profile-handle">@bliza.om</div>
+
+  <!-- Stats -->
+  <div class="profile-stats">
+    <div class="pstat">
+      <div class="pstat-num">44.3K</div>
+      <div class="pstat-label">متابع</div>
+    </div>
+    <div class="pstat">
+      <div class="pstat-num">8+</div>
+      <div class="pstat-label">موديل</div>
+    </div>
+    <div class="pstat">
+      <div class="pstat-num">🇴🇲</div>
+      <div class="pstat-label">عُمان</div>
+    </div>
+  </div>
+
+  <!-- Social -->
+  <div class="profile-social">
+    <a href="https://instagram.com/bliza.om" target="_blank" class="social-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+      </svg>
+      إنستا
+    </a>
+    <a href="https://wa.me/96871170098" target="_blank" class="social-btn wa">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.553 4.116 1.522 5.847L.057 23.882l6.186-1.438A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.011-1.374l-.36-.213-3.722.864.935-3.614-.234-.371A9.818 9.818 0 1112 21.818z"/></svg>
+      واتساب
+    </a>
+  </div>
+</div>
 
 <nav>
   <div>
     <div class="logo-main">Bliza</div>
     <div class="logo-sub">ABAYA</div>
   </div>
-  <a href="https://wa.me/96871170098" target="_blank" class="nav-wa">
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.553 4.116 1.522 5.847L.057 23.882l6.186-1.438A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.011-1.374l-.36-.213-3.722.864.935-3.614-.234-.371A9.818 9.818 0 1112 21.818z"/></svg>
-    واتساب
-  </a>
+  <div style="display:flex;align-items:center;gap:10px">
+    <button onclick="openCart()" style="position:relative;background:rgba(255,255,255,.1);border:none;
+      border-radius:50%;width:42px;height:42px;cursor:pointer;font-size:20px;
+      display:flex;align-items:center;justify-content:center">
+      🛒
+      <span id="cartBadge" style="display:none;position:absolute;top:-4px;right:-4px;
+        background:#C8A951;color:#1A0618;font-size:10px;font-weight:900;
+        width:18px;height:18px;border-radius:50%;align-items:center;justify-content:center">0</span>
+    </button>
+    <div style="display:flex;align-items:center;gap:8px">
+      <a href="https://instagram.com/bliza.om" target="_blank"
+        style="background:rgba(255,255,255,.1);border:none;border-radius:50%;
+        width:38px;height:38px;display:flex;align-items:center;justify-content:center;
+        text-decoration:none;transition:background .2s"
+        onmouseover="this.style.background='rgba(200,169,81,.3)'"
+        onmouseout="this.style.background='rgba(255,255,255,.1)'">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+        </svg>
+      </a>
+      <a href="https://wa.me/96871170098" target="_blank" class="nav-wa">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.553 4.116 1.522 5.847L.057 23.882l6.186-1.438A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.011-1.374l-.36-.213-3.722.864.935-3.614-.234-.371A9.818 9.818 0 1112 21.818z"/></svg>
+        واتساب
+      </a>
+    </div>
+  </div>
 </nav>
 
 <section class="hero">
-  <div class="hero-badge">✦ تفاصيل تصنع الفخامة ✦</div>
-  <h1>عبايات Bliza<br>الفاخرة</h1>
-  <p>تصاميم راقية بأقمشة انسيابية وتفاصيل ذهبية — لمسة أناقة في كل تفصيلة</p>
-  <a href="#products" class="hero-cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'});return false">
-    🌸 تسوّقي الآن
-  </a>
+  <canvas id="heroCanvas"></canvas>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+
+  <div class="hero-content">
+    <div>
+      <div class="hero-badge">
+        <div class="badge-dot"></div>
+        ✦ تفاصيل تصنع الفخامة ✦
+      </div>
+      <div class="hero-logo-wrap">
+        <div class="hero-logo-text">Bliza</div>
+        <div class="hero-logo-sub">A B A Y A</div>
+      </div>
+      <div class="hero-gold-line"></div>
+      <p>تصاميم راقية بأقمشة انسيابية<br>وتفاصيل <strong>ذهبية فاخرة</strong> — لمسة أناقة في كل تفصيلة</p>
+      <div class="hero-btns">
+        <a href="#products" class="hero-cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'});return false">
+          🌸 تسوّقي الآن
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><div class="hstat-num">8+</div><div class="hstat-label">موديلات</div></div>
+        <div class="hstat-div"></div>
+        <div class="hstat"><div class="hstat-num">100%</div><div class="hstat-label">خياطة يدوية</div></div>
+        <div class="hstat-div"></div>
+        <div class="hstat"><div class="hstat-num">🇴🇲</div><div class="hstat-label">صنع في عُمان</div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-mouse"><div class="scroll-wheel"></div></div>
+    <span>مرّري للأسفل</span>
+  </div>
 </section>
 
 <div class="features">
@@ -351,6 +491,7 @@ function sendOrder() {
 *👤 بيانات العميلة:*
 الاسم: ${name}
 الهاتف: ${phone}
+الموقع: ${document.getElementById('floc').value||'—'}
 
 *📏 القياسات (سم):*
 الطول: ${document.getElementById("fh").value||"—"}
@@ -379,7 +520,322 @@ function showPay(type) {
   document.getElementById('btnGulf').style.borderColor = type==='gulf' ? 'var(--brand)' : 'var(--border)';
 }
 
+
+// ── Gold Particles ──────────────────────────────────────────────
+(function(){
+  const canvas = document.getElementById('heroCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  function resize(){canvas.width=canvas.offsetWidth;canvas.height=canvas.offsetHeight;}
+  resize(); window.addEventListener('resize',resize);
+  const COLORS=['#C8A951','#E8D5A0','#FFE88A','#D4B86A','rgba(200,169,81,.5)'];
+  class Particle{
+    constructor(){this.reset(true);}
+    reset(init){
+      this.x=Math.random()*canvas.width;
+      this.y=init?Math.random()*canvas.height:canvas.height+10;
+      this.size=Math.random()*2.5+.5;
+      this.speedX=(Math.random()-.5)*.4;
+      this.speedY=-Math.random()*.8-.2;
+      this.opacity=Math.random()*.7+.1;
+      this.color=COLORS[Math.floor(Math.random()*COLORS.length)];
+      this.life=1; this.decay=Math.random()*.003+.001;
+      this.twinkle=Math.random()*Math.PI*2;
+    }
+    update(){
+      this.x+=this.speedX; this.y+=this.speedY;
+      this.life-=this.decay; this.twinkle+=.05;
+      this.opacity=this.life*(.5+.3*Math.sin(this.twinkle));
+      if(this.life<=0||this.y<-10)this.reset(false);
+    }
+    draw(){
+      ctx.save(); ctx.globalAlpha=Math.max(0,this.opacity);
+      ctx.fillStyle=this.color; ctx.shadowBlur=6; ctx.shadowColor='#C8A951';
+      ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2); ctx.fill();
+      ctx.restore();
+    }
+  }
+  class Star{
+    constructor(){this.reset();}
+    reset(){this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;
+      this.size=Math.random()*1.5+.5;this.twinkle=Math.random()*Math.PI*2;this.speed=Math.random()*.02+.01;}
+    update(){this.twinkle+=this.speed;}
+    draw(){
+      ctx.save(); ctx.globalAlpha=.15+.2*Math.sin(this.twinkle);
+      ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2); ctx.fill();
+      ctx.restore();
+    }
+  }
+  const particles=Array.from({length:100},()=>new Particle());
+  const stars=Array.from({length:60},()=>new Star());
+  function animate(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    stars.forEach(s=>{s.update();s.draw();});
+    particles.forEach(p=>{p.update();p.draw();});
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+
+
+// ── CART ────────────────────────────────────────────────────────────
+let cart = [];
+
+function updateCartBadge() {
+  const badge = document.getElementById('cartBadge');
+  const floatCart = document.getElementById('floatCart');
+  const floatCount = document.getElementById('floatCount');
+  const n = cart.length;
+  if (n > 0) {
+    badge.style.display = 'flex';
+    badge.textContent = n;
+    floatCart.classList.add('visible');
+    floatCount.textContent = n;
+  } else {
+    badge.style.display = 'none';
+    floatCart.classList.remove('visible');
+  }
+}
+
+function quickAddCart(productId) {
+  const p = PRODUCTS.find(x => x.id === productId);
+  cart.push({ product: p, color: p.colors[0].name, colorHex: p.colors[0].hex,
+    qty: 1, id: Date.now() });
+  updateCartBadge();
+  // Show mini toast
+  const t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#4A1942;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:9999;font-family:inherit';
+  t.textContent = '✅ أضيفت للسلة!';
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2000);
+}
+
+function openCart() {
+  const el = document.getElementById('cartOverlay');
+  const items = document.getElementById('cartItems');
+  const footer = document.getElementById('cartFooter');
+
+  if (cart.length === 0) {
+    items.innerHTML = '<div class="cart-empty"><div class="cart-empty-icon">🛒</div><p>السلة فارغة</p></div>';
+    footer.innerHTML = '<button class="cart-continue" onclick="closeCart()">← تصفحي العبايات</button>';
+  } else {
+    items.innerHTML = cart.map(item => `
+      <div class="cart-item">
+        <div class="cart-item-img"><img src="${IMG[item.product.id]}" alt="${item.product.name}"></div>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.product.name}</div>
+          <div class="cart-item-color">
+            <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:${item.colorHex};margin-left:4px;vertical-align:middle"></span>
+            ${item.color}
+          </div>
+          <div class="cart-item-price">29.000 ر.ع</div>
+        </div>
+        <button class="cart-item-remove" onclick="removeFromCart(${item.id})">🗑️ حذف</button>
+      </div>`).join('');
+
+    const total = cart.length * 29;
+    footer.innerHTML = `
+      <div class="cart-total">
+        <span>المجموع (${cart.length} عباية)</span>
+        <span>${total}.000 ر.ع</span>
+      </div>
+      <button class="cart-checkout-btn" onclick="closeCart();openCheckout()">إتمام الطلب ✦</button>
+      <button class="cart-continue" onclick="closeCart()">← أضيفي المزيد</button>`;
+  }
+
+  el.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCart() {
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(i => i.id !== id);
+  updateCartBadge();
+  openCart();
+}
+
+function openCheckout() {
+  if (cart.length === 0) return;
+  const total = cart.length * 29;
+  const summary = document.getElementById('checkoutSummary');
+  summary.innerHTML = `
+    <div style="background:#faf6f9;border-radius:14px;padding:14px;margin-bottom:18px">
+      <div style="font-size:13px;font-weight:700;color:var(--brand);margin-bottom:10px">📋 ملخص الطلب (${cart.length} عباية)</div>
+      ${cart.map(item => `
+        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px">
+          <span>${item.product.id} — ${item.product.name} · <span style="color:var(--gray)">${item.color}</span></span>
+          <span style="font-weight:700">29.000 ر.ع</span>
+        </div>`).join('')}
+      <div style="display:flex;justify-content:space-between;padding:10px 0 0;font-size:15px;font-weight:800;color:var(--brand)">
+        <span>المجموع الكلي</span>
+        <span>${total}.000 ر.ع</span>
+      </div>
+    </div>`;
+
+  document.getElementById('cTotalAmount').textContent = `${total}.000 ر.ع`;
+  document.getElementById('cTotalAmount2').textContent = `${total}.000 ر.ع`;
+  ['cfn','cfp','cfh','cfs','cfc','cfsl','cfno','cftr'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('cfloc').value = '';
+  document.getElementById('checkoutOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCheckout() {
+  document.getElementById('checkoutOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function showPayC(type) {
+  document.getElementById('cpayOman').style.display = type==='oman'?'block':'none';
+  document.getElementById('cpayGulf').style.display = type==='gulf'?'block':'none';
+  document.getElementById('cbtnOman').style.background = type==='oman'?'var(--brand)':'#fff';
+  document.getElementById('cbtnOman').style.color = type==='oman'?'#fff':'var(--brand)';
+  document.getElementById('cbtnOman').style.borderColor = type==='oman'?'var(--brand)':'var(--border)';
+  document.getElementById('cbtnGulf').style.background = type==='gulf'?'var(--brand)':'#fff';
+  document.getElementById('cbtnGulf').style.color = type==='gulf'?'#fff':'var(--brand)';
+  document.getElementById('cbtnGulf').style.borderColor = type==='gulf'?'var(--brand)':'var(--border)';
+}
+
+function sendCartOrder() {
+  const name  = document.getElementById('cfn').value.trim();
+  const phone = document.getElementById('cfp').value.trim();
+  const loc   = document.getElementById('cfloc').value;
+  if (!name || !phone) { alert('يرجى إدخال الاسم ورقم الهاتف'); return; }
+  if (!loc) { alert('يرجى اختيار الموقع / المحافظة'); return; }
+
+  const total = cart.length * 29;
+  const itemsList = cart.map((item, i) =>
+    `${i+1}. ${item.product.id} — ${item.product.name} · اللون: ${item.color}`
+  ).join('\n');
+
+  const msg = `🌸 *طلب جديد - Bliza Abaya*
+
+*📋 العبايات المطلوبة (${cart.length} عباية):*
+${itemsList}
+
+*💰 المجموع الكلي:* ${total}.000 ر.ع
+
+*👤 بيانات العميلة:*
+الاسم: ${name}
+الهاتف: ${phone}
+الموقع: ${loc}
+
+*📏 القياسات (سم):*
+الطول: ${document.getElementById('cfh').value||'—'}
+الكتف: ${document.getElementById('cfs').value||'—'}
+الصدر: ${document.getElementById('cfc').value||'—'}
+طول الكم: ${document.getElementById('cfsl').value||'—'}
+
+*💳 رقم التحويل:* ${document.getElementById('cftr').value||'سيتم الإرسال'}
+${document.getElementById('cfno').value ? '*ملاحظات:* '+document.getElementById('cfno').value : ''}
+
+_تم الطلب عبر موقع Bliza Abaya_`;
+
+  window.open(`https://wa.me/96871170098?text=${encodeURIComponent(msg)}`, '_blank');
+  cart = [];
+  updateCartBadge();
+  closeCheckout();
+}
+
 renderProducts();
 </script>
+
+<!-- CART MODAL -->
+<div class="cart-overlay" id="cartOverlay" onclick="if(event.target===this)closeCart()">
+  <div class="cart-modal">
+    <div class="cart-header">
+      <div class="cart-title">🛒 سلة التسوق</div>
+      <button class="close-btn" onclick="closeCart()">✕</button>
+    </div>
+    <div id="cartItems"></div>
+    <div id="cartFooter"></div>
+  </div>
+</div>
+
+<!-- Floating Cart Button -->
+<button class="float-cart" id="floatCart" onclick="openCart()">
+  🛒 السلة <span id="floatCount">0</span>
+</button>
+
+<!-- CHECKOUT MODAL -->
+<div class="overlay" id="checkoutOverlay" onclick="if(event.target===this)closeCheckout()" style="z-index:700">
+  <div class="modal" style="max-height:95vh">
+    <div class="modal-header">
+      <div class="modal-title">🌸 إتمام الطلب</div>
+      <button class="close-btn" onclick="closeCheckout()">✕</button>
+    </div>
+
+    <!-- Order summary -->
+    <div id="checkoutSummary"></div>
+
+    <div class="sec-label">👤 بياناتك الشخصية</div>
+    <div class="form-group"><label>الاسم الكامل *</label><input id="cfn" placeholder="اسمك الكريم"></div>
+    <div class="form-group"><label>رقم الهاتف *</label><input id="cfp" type="tel" placeholder="+968 XXXX XXXX"></div>
+    <div class="form-group"><label>الدولة / المحافظة *</label><select id="cfloc">
+      <option value="">— اختاري —</option>
+      <optgroup label="🇴🇲 عُمان">
+        <option>مسقط</option><option>صلالة</option><option>صحار</option>
+        <option>نزوى</option><option>صور</option><option>البريمي</option>
+        <option>مطرح</option><option>محافظة أخرى في عُمان</option>
+      </optgroup>
+      <optgroup label="🇸🇦 السعودية">
+        <option>الرياض</option><option>جدة</option><option>الدمام</option>
+        <option>مكة المكرمة</option><option>مدينة أخرى في السعودية</option>
+      </optgroup>
+      <optgroup label="🇦🇪 الإمارات">
+        <option>دبي</option><option>أبوظبي</option><option>الشارقة</option><option>مدينة أخرى في الإمارات</option>
+      </optgroup>
+      <optgroup label="🇰🇼 الكويت"><option>الكويت</option></optgroup>
+      <optgroup label="🇧🇭 البحرين"><option>المنامة</option></optgroup>
+      <optgroup label="🇶🇦 قطر"><option>الدوحة</option></optgroup>
+      <optgroup label="🌍 دول أخرى"><option>دولة أخرى</option></optgroup>
+    </select></div>
+
+    <div class="sec-label">📏 القياسات (سم)</div>
+    <div class="mgrid">
+      <div class="form-group"><label>الطول</label><input id="cfh" type="number" placeholder="162"></div>
+      <div class="form-group"><label>الكتف</label><input id="cfs" type="number" placeholder="42"></div>
+      <div class="form-group"><label>الصدر</label><input id="cfc" type="number" placeholder="96"></div>
+      <div class="form-group"><label>طول الكم</label><input id="cfsl" type="number" placeholder="60"></div>
+    </div>
+    <div class="form-group"><label>ملاحظات</label>
+      <textarea id="cfno" rows="2" placeholder="أي تعديلات أو طلبات خاصة..."></textarea>
+    </div>
+
+    <div class="sec-label">💳 طريقة الدفع</div>
+    <div style="display:flex;gap:10px;margin-bottom:14px">
+      <button type="button" onclick="showPayC('oman')" id="cbtnOman" style="flex:1;padding:10px;border-radius:12px;border:2px solid var(--brand);background:var(--brand);color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer">🇴🇲 داخل عُمان</button>
+      <button type="button" onclick="showPayC('gulf')" id="cbtnGulf" style="flex:1;padding:10px;border-radius:12px;border:2px solid var(--border);background:#fff;color:var(--brand);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer">🌍 دول الخليج</button>
+    </div>
+    <div id="cpayOman" class="pay-box">
+      <div class="pt">حوّلي المبلغ على رقم الهاتف</div>
+      <div class="pn">71170098</div>
+      <div class="pb">Bliza Abaya — عُمان 🇴🇲</div>
+      <div class="pa" id="cTotalAmount">29.000 ر.ع</div>
+    </div>
+    <div id="cpayGulf" class="pay-box" style="display:none">
+      <div class="pt">تحويل بنكي دولي</div>
+      <div style="font-size:13px;color:var(--brand);margin:8px 0;font-weight:700">Bank Muscat 🇴🇲</div>
+      <div style="font-size:12px;color:var(--gray);line-height:2">
+        IBAN: <strong>أضيفي رقم IBAN هنا</strong><br>
+        اسم صاحب الحساب: <strong>Bliza Abaya</strong>
+      </div>
+      <div class="pa" id="cTotalAmount2">29.000 ر.ع</div>
+    </div>
+    <div style="background:#fff8e6;border:1.5px solid #f0c040;border-radius:12px;padding:12px;margin-bottom:14px;font-size:12px;color:#8a6200;line-height:1.8;text-align:center">
+      ⚠️ بعد إرسال الطلب، أرسلي صورة إيصال التحويل على واتساب لتثبيت طلبك
+    </div>
+    <div class="form-group"><label>رقم عملية التحويل (اختياري)</label><input id="cftr" placeholder="للتسريع في تأكيد طلبك"></div>
+
+    <button class="wa-btn" onclick="sendCartOrder()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.553 4.116 1.522 5.847L.057 23.882l6.186-1.438A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.011-1.374l-.36-.213-3.722.864.935-3.614-.234-.371A9.818 9.818 0 1112 21.818z"/></svg>
+      أرسلي طلبك عبر واتساب
+    </button>
+  </div>
+</div>
 </body>
 </html>
