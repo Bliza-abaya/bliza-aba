@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -15,144 +14,143 @@
   }
   body{font-family:'Tajawal',sans-serif;background:var(--cream);color:var(--text);min-height:100vh}
 
-nav{position:sticky;top:0;z-index:100;background:var(–brand);padding:0 20px;
-display:flex;align-items:center;justify-content:space-between;height:60px;
-box-shadow:0 2px 20px rgba(74,25,66,.3)}
-.logo-main{font-size:22px;font-weight:900;color:#fff;letter-spacing:2px}
-.logo-sub{font-size:9px;color:var(–gold);letter-spacing:5px}
-.nav-wa{display:flex;align-items:center;gap:7px;background:#25D366;color:#fff;
-border:none;border-radius:30px;padding:8px 16px;font-size:13px;font-weight:700;
-cursor:pointer;text-decoration:none;font-family:inherit}
+  nav{position:sticky;top:0;z-index:100;background:var(--brand);padding:0 20px;
+    display:flex;align-items:center;justify-content:space-between;height:60px;
+    box-shadow:0 2px 20px rgba(74,25,66,.3)}
+  .logo-main{font-size:22px;font-weight:900;color:#fff;letter-spacing:2px}
+  .logo-sub{font-size:9px;color:var(--gold);letter-spacing:5px}
+  .nav-wa{display:flex;align-items:center;gap:7px;background:#25D366;color:#fff;
+    border:none;border-radius:30px;padding:8px 16px;font-size:13px;font-weight:700;
+    cursor:pointer;text-decoration:none;font-family:inherit}
 
-.hero{background:linear-gradient(160deg,var(–brand) 0%,var(–mid) 60%,#A0688A 100%);
-padding:50px 20px 60px;text-align:center;position:relative;overflow:hidden}
-.hero::before{content:””;position:absolute;inset:0;
-background:url(“data:image/svg+xml,%3Csvg width=‘60’ height=‘60’ viewBox=‘0 0 60 60’ xmlns=‘http://www.w3.org/2000/svg’%3E%3Cg fill=‘none’%3E%3Cg fill=’%23C8A951’ fill-opacity=‘0.06’%3E%3Cpath d=‘M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z’/%3E%3C/g%3E%3C/g%3E%3C/svg%3E”)}
-.hero-badge{display:inline-block;background:rgba(200,169,81,.2);border:1px solid var(–gold);
-color:var(–gold);font-size:11px;font-weight:700;padding:5px 16px;border-radius:30px;
-letter-spacing:3px;margin-bottom:16px}
-.hero h1{font-size:clamp(26px,7vw,46px);font-weight:900;color:#fff;line-height:1.2;margin-bottom:10px}
-.hero p{font-size:14px;color:rgba(255,255,255,.75);max-width:380px;margin:0 auto 26px;line-height:1.8}
-.hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(–gold);color:var(–brand);
-border:none;border-radius:50px;padding:13px 30px;font-size:15px;font-weight:800;
-cursor:pointer;text-decoration:none;font-family:inherit;
-box-shadow:0 4px 20px rgba(200,169,81,.4);transition:transform .2s}
-.hero-cta:hover{transform:translateY(-2px)}
+  .hero{background:linear-gradient(160deg,#1A0618 0%,#3D1538 50%,#5E2E5C 100%);
+    padding:50px 20px 60px;text-align:center;position:relative;overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:0;
+    background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23C8A951' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+  .hero-badge{display:inline-block;background:rgba(200,169,81,.2);border:1px solid var(--gold);
+    color:var(--gold);font-size:11px;font-weight:700;padding:5px 16px;border-radius:30px;
+    letter-spacing:3px;margin-bottom:16px}
+  .hero h1{font-size:clamp(26px,7vw,46px);font-weight:900;color:#fff;line-height:1.2;margin-bottom:10px;text-shadow:0 2px 8px rgba(0,0,0,.4)}
+  .hero p{font-size:14px;color:rgba(255,255,255,.95);max-width:380px;margin:0 auto 26px;line-height:1.8}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--brand);
+    border:none;border-radius:50px;padding:13px 30px;font-size:15px;font-weight:800;
+    cursor:pointer;text-decoration:none;font-family:inherit;
+    box-shadow:0 4px 20px rgba(200,169,81,.4);transition:transform .2s}
+  .hero-cta:hover{transform:translateY(-2px)}
 
-.features{background:var(–white);display:flex;justify-content:center;flex-wrap:wrap;
-border-bottom:1px solid var(–border)}
-.fi{display:flex;align-items:center;gap:7px;padding:12px 20px;font-size:11px;
-font-weight:600;color:var(–gray);border-left:1px solid var(–border)}
-.fi:last-child{border-left:none}
+  .features{background:var(--white);display:flex;justify-content:center;flex-wrap:wrap;
+    border-bottom:1px solid var(--border)}
+  .fi{display:flex;align-items:center;gap:7px;padding:12px 20px;font-size:11px;
+    font-weight:600;color:var(--gray);border-left:1px solid var(--border)}
+  .fi:last-child{border-left:none}
 
-.sec-title{text-align:center;padding:44px 20px 28px}
-.eyebrow{font-size:10px;font-weight:700;color:var(–gold);letter-spacing:4px;
-text-transform:uppercase;margin-bottom:8px}
-.sec-title h2{font-size:clamp(20px,5vw,30px);font-weight:900;color:var(–brand)}
-.gold-line{width:44px;height:2px;background:var(–gold);margin:10px auto 0;border-radius:2px}
+  .sec-title{text-align:center;padding:44px 20px 28px}
+  .eyebrow{font-size:10px;font-weight:700;color:var(--gold);letter-spacing:4px;
+    text-transform:uppercase;margin-bottom:8px}
+  .sec-title h2{font-size:clamp(20px,5vw,30px);font-weight:900;color:var(--brand)}
+  .gold-line{width:44px;height:2px;background:var(--gold);margin:10px auto 0;border-radius:2px}
 
-.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-gap:20px;padding:0 16px 48px;max-width:1100px;margin:0 auto}
-.card{background:var(–white);border-radius:20px;overflow:hidden;
-box-shadow:0 4px 20px rgba(74,25,66,.08);transition:transform .25s,box-shadow .25s;cursor:pointer}
-.card:hover{transform:translateY(-5px);box-shadow:0 12px 36px rgba(74,25,66,.15)}
-.card-img{width:100%;aspect-ratio:2/3;overflow:hidden;background:#f0e8ef;position:relative}
-.card-img img{width:100%;height:100%;object-fit:cover;object-position:top;
-transition:transform .4s}
-.card:hover .card-img img{transform:scale(1.04)}
-.card-body{padding:16px 18px 18px}
-.card-num{font-size:10px;font-weight:700;color:var(–gold);letter-spacing:3px;margin-bottom:4px}
-.card-name{font-size:16px;font-weight:800;color:var(–brand);margin-bottom:5px}
-.card-desc{font-size:12px;color:var(–gray);line-height:1.7;margin-bottom:12px}
-.card-colors{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px}
-.cdot{width:20px;height:20px;border-radius:50%;border:2px solid var(–border);
-cursor:pointer;transition:transform .15s}
-.cdot:hover{transform:scale(1.2)}
-.card-footer{display:flex;align-items:center;justify-content:space-between}
-.price{font-size:20px;font-weight:900;color:var(–brand)}
-.price span{font-size:12px;font-weight:500;color:var(–gray)}
-.order-btn{background:var(–brand);color:#fff;border:none;border-radius:10px;
-padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;
-transition:background .2s}
-.order-btn:hover{background:var(–mid)}
+  .products{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+    gap:20px;padding:0 16px 48px;max-width:1100px;margin:0 auto}
+  .card{background:var(--white);border-radius:20px;overflow:hidden;
+    box-shadow:0 4px 20px rgba(74,25,66,.08);transition:transform .25s,box-shadow .25s;cursor:pointer}
+  .card:hover{transform:translateY(-5px);box-shadow:0 12px 36px rgba(74,25,66,.15)}
+  .card-img{width:100%;aspect-ratio:2/3;overflow:hidden;background:#f0e8ef;position:relative}
+  .card-img img{width:100%;height:100%;object-fit:cover;object-position:top;
+    transition:transform .4s}
+  .card:hover .card-img img{transform:scale(1.04)}
+  .card-body{padding:16px 18px 18px}
+  .card-num{font-size:10px;font-weight:700;color:var(--gold);letter-spacing:3px;margin-bottom:4px}
+  .card-name{font-size:16px;font-weight:800;color:var(--brand);margin-bottom:5px}
+  .card-desc{font-size:12px;color:var(--gray);line-height:1.7;margin-bottom:12px}
+  .card-colors{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px}
+  .cdot{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);
+    cursor:pointer;transition:transform .15s}
+  .cdot:hover{transform:scale(1.2)}
+  .card-footer{display:flex;align-items:center;justify-content:space-between}
+  .price{font-size:20px;font-weight:900;color:var(--brand)}
+  .price span{font-size:12px;font-weight:500;color:var(--gray)}
+  .order-btn{background:var(--brand);color:#fff;border:none;border-radius:10px;
+    padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;
+    transition:background .2s}
+  .order-btn:hover{background:var(--mid)}
 
-.overlay{display:none;position:fixed;inset:0;background:rgba(28,15,27,.6);z-index:500;
-align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
-.overlay.open{display:flex}
-.modal{background:var(–white);border-radius:28px 28px 0 0;width:100%;max-width:520px;
-max-height:92vh;overflow-y:auto;padding:24px 20px 40px;animation:slideUp .3s ease}
-@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
-.modal-title{font-size:19px;font-weight:900;color:var(–brand)}
-.close-btn{background:#f0e8ef;border:none;border-radius:50%;width:34px;height:34px;
-font-size:17px;cursor:pointer;color:var(–brand)}
+  .overlay{display:none;position:fixed;inset:0;background:rgba(28,15,27,.6);z-index:500;
+    align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
+  .overlay.open{display:flex}
+  .modal{background:var(--white);border-radius:28px 28px 0 0;width:100%;max-width:520px;
+    max-height:92vh;overflow-y:auto;padding:24px 20px 40px;animation:slideUp .3s ease}
+  @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+  .modal-title{font-size:19px;font-weight:900;color:var(--brand)}
+  .close-btn{background:#f0e8ef;border:none;border-radius:50%;width:34px;height:34px;
+    font-size:17px;cursor:pointer;color:var(--brand)}
 
-.modal-product{display:flex;gap:14px;align-items:center;background:#faf6f9;
-border-radius:14px;padding:12px;margin-bottom:18px}
-.modal-thumb{width:65px;height:85px;border-radius:10px;overflow:hidden;
-background:#e8d5e8;flex-shrink:0}
-.modal-thumb img{width:100%;height:100%;object-fit:cover;object-position:top}
-.mi-num{font-size:10px;color:var(–gold);font-weight:700;letter-spacing:2px;margin-bottom:3px}
-.mi-name{font-size:14px;font-weight:800;color:var(–brand)}
-.mi-price{font-size:18px;font-weight:900;color:var(–brand);margin-top:4px}
+  .modal-product{display:flex;gap:14px;align-items:center;background:#faf6f9;
+    border-radius:14px;padding:12px;margin-bottom:18px}
+  .modal-thumb{width:65px;height:85px;border-radius:10px;overflow:hidden;
+    background:#e8d5e8;flex-shrink:0}
+  .modal-thumb img{width:100%;height:100%;object-fit:cover;object-position:top}
+  .mi-num{font-size:10px;color:var(--gold);font-weight:700;letter-spacing:2px;margin-bottom:3px}
+  .mi-name{font-size:14px;font-weight:800;color:var(--brand)}
+  .mi-price{font-size:18px;font-weight:900;color:var(--brand);margin-top:4px}
 
-.modal-colors{margin-bottom:16px}
-.modal-colors label{font-size:12px;font-weight:700;color:var(–gray);display:block;margin-bottom:7px}
-.color-options{display:flex;gap:10px;flex-wrap:wrap}
-.color-opt{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer}
-.cswatch{width:30px;height:30px;border-radius:50%;border:3px solid transparent;transition:border-color .15s,transform .15s}
-.color-opt.selected .cswatch{border-color:var(–gold);transform:scale(1.15)}
-.color-opt span{font-size:9px;color:var(–gray);font-weight:600;text-align:center;max-width:40px}
+  .modal-colors{margin-bottom:16px}
+  .modal-colors label{font-size:12px;font-weight:700;color:var(--gray);display:block;margin-bottom:7px}
+  .color-options{display:flex;gap:10px;flex-wrap:wrap}
+  .color-opt{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer}
+  .cswatch{width:30px;height:30px;border-radius:50%;border:3px solid transparent;transition:border-color .15s,transform .15s}
+  .color-opt.selected .cswatch{border-color:var(--gold);transform:scale(1.15)}
+  .color-opt span{font-size:9px;color:var(--gray);font-weight:600;text-align:center;max-width:40px}
 
-.sec-label{font-size:13px;font-weight:800;color:var(–brand);margin:16px 0 10px;
-display:flex;align-items:center;gap:7px}
-.form-group{margin-bottom:12px}
-.form-group label{display:block;font-size:12px;font-weight:700;color:var(–gray);margin-bottom:5px}
-.form-group input,.form-group select,.form-group textarea{
-width:100%;padding:10px 13px;border-radius:11px;font-size:14px;
-border:1.5px solid var(–border);background:var(–white);color:var(–text);
-outline:none;direction:rtl;font-family:inherit;transition:border-color .2s}
-.form-group input:focus,.form-group select:focus{border-color:var(–mid)}
-.form-group textarea{resize:none}
-.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .sec-label{font-size:13px;font-weight:800;color:var(--brand);margin:16px 0 10px;
+    display:flex;align-items:center;gap:7px}
+  .form-group{margin-bottom:12px}
+  .form-group label{display:block;font-size:12px;font-weight:700;color:var(--gray);margin-bottom:5px}
+  .form-group input,.form-group select,.form-group textarea{
+    width:100%;padding:10px 13px;border-radius:11px;font-size:14px;
+    border:1.5px solid var(--border);background:var(--white);color:var(--text);
+    outline:none;direction:rtl;font-family:inherit;transition:border-color .2s}
+  .form-group input:focus,.form-group select:focus{border-color:var(--mid)}
+  .form-group textarea{resize:none}
+  .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
-.pay-box{background:linear-gradient(135deg,#faf6f9,#f0e8ef);border:1.5px solid var(–border);
-border-radius:14px;padding:16px;margin-bottom:18px;text-align:center}
-.pay-box .pt{font-size:13px;font-weight:700;color:var(–brand);margin-bottom:6px}
-.pay-box .pn{font-size:24px;font-weight:900;color:var(–brand);letter-spacing:2px;margin-bottom:3px}
-.pay-box .pb{font-size:11px;color:var(–gray)}
-.pay-box .pa{margin-top:10px;background:var(–brand);color:#fff;border-radius:30px;
-padding:6px 20px;display:inline-block;font-size:15px;font-weight:800}
+  .pay-box{background:linear-gradient(135deg,#faf6f9,#f0e8ef);border:1.5px solid var(--border);
+    border-radius:14px;padding:16px;margin-bottom:18px;text-align:center}
+  .pay-box .pt{font-size:13px;font-weight:700;color:var(--brand);margin-bottom:6px}
+  .pay-box .pn{font-size:24px;font-weight:900;color:var(--brand);letter-spacing:2px;margin-bottom:3px}
+  .pay-box .pb{font-size:11px;color:var(--gray)}
+  .pay-box .pa{margin-top:10px;background:var(--brand);color:#fff;border-radius:30px;
+    padding:6px 20px;display:inline-block;font-size:15px;font-weight:800}
 
-.wa-btn{width:100%;padding:15px;background:#25D366;color:#fff;border:none;
-border-radius:13px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;
-display:flex;align-items:center;justify-content:center;gap:9px;transition:background .2s}
-.wa-btn:hover{background:#1da851}
+  .wa-btn{width:100%;padding:15px;background:#25D366;color:#fff;border:none;
+    border-radius:13px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;
+    display:flex;align-items:center;justify-content:center;gap:9px;transition:background .2s}
+  .wa-btn:hover{background:#1da851}
 
-.how{background:var(–brand);padding:52px 20px;text-align:center}
-.how h2{font-size:24px;font-weight:900;color:#fff;margin-bottom:6px}
-.how p{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:32px}
-.steps{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;max-width:800px;margin:0 auto}
-.step{background:rgba(255,255,255,.08);border:1px solid rgba(200,169,81,.3);
-border-radius:16px;padding:20px 16px;width:160px;text-align:center}
-.step-icon{font-size:30px;margin-bottom:10px}
-.step-title{font-size:13px;font-weight:800;color:#fff;margin-bottom:5px}
-.step-desc{font-size:11px;color:rgba(255,255,255,.55);line-height:1.6}
+  .how{background:var(--brand);padding:52px 20px;text-align:center}
+  .how h2{font-size:24px;font-weight:900;color:#fff;margin-bottom:6px}
+  .how p{font-size:13px;color:rgba(255,255,255,.9);margin-bottom:32px}
+  .steps{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;max-width:800px;margin:0 auto}
+  .step{background:rgba(255,255,255,.08);border:1px solid rgba(200,169,81,.3);
+    border-radius:16px;padding:20px 16px;width:160px;text-align:center}
+  .step-icon{font-size:30px;margin-bottom:10px}
+  .step-title{font-size:13px;font-weight:800;color:#fff;margin-bottom:5px}
+  .step-desc{font-size:11px;color:rgba(255,255,255,.85);line-height:1.6}
 
-footer{background:#1C0F1B;padding:28px 20px;text-align:center}
-footer .lm{color:#fff;font-size:20px;font-weight:900;margin-bottom:4px}
-footer .ls{color:var(–gold);font-size:9px;letter-spacing:5px;margin-bottom:14px}
-footer p{font-size:12px;color:rgba(255,255,255,.4)}
-footer a{color:var(–gold);text-decoration:none;font-weight:700}
+  footer{background:#1C0F1B;padding:28px 20px;text-align:center}
+  footer .lm{color:#fff;font-size:20px;font-weight:900;margin-bottom:4px}
+  footer .ls{color:var(--gold);font-size:9px;letter-spacing:5px;margin-bottom:14px}
+  footer p{font-size:12px;color:rgba(255,255,255,.4)}
+  footer a{color:var(--gold);text-decoration:none;font-weight:700}
 
-@media(max-width:480px){
-.products{grid-template-columns:1fr 1fr;gap:12px;padding:0 10px 40px}
-.card-body{padding:10px 12px 14px}
-.card-name{font-size:13px}
-.mgrid{grid-template-columns:1fr}
-}
+  @media(max-width:480px){
+    .products{grid-template-columns:1fr 1fr;gap:12px;padding:0 10px 40px}
+    .card-body{padding:10px 12px 14px}
+    .card-name{font-size:13px}
+    .mgrid{grid-template-columns:1fr}
+  }
 </style>
-
 </head>
 <body>
 
@@ -161,7 +159,7 @@ footer a{color:var(–gold);text-decoration:none;font-weight:700}
     <div class="logo-main">Bliza</div>
     <div class="logo-sub">ABAYA</div>
   </div>
-  <a href="https://wa.me/96897733904" target="_blank" class="nav-wa">
+  <a href="https://wa.me/96871170098" target="_blank" class="nav-wa">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.553 4.116 1.522 5.847L.057 23.882l6.186-1.438A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.011-1.374l-.36-.213-3.722.864.935-3.614-.234-.371A9.818 9.818 0 1112 21.818z"/></svg>
     واتساب
   </a>
@@ -205,7 +203,7 @@ footer a{color:var(–gold);text-decoration:none;font-weight:700}
 <footer>
   <div class="lm">Bliza</div>
   <div class="ls">ABAYA</div>
-  <p>للتواصل: <a href="https://wa.me/96897733904">واتساب +968 9773 3904</a></p>
+  <p>للتواصل: <a href="https://wa.me/96871170098">+968 7117 0098 :واتساب</a></p>
   <p style="margin-top:6px">© 2025 Bliza Abaya — جميع الحقوق محفوظة</p>
 </footer>
 
@@ -235,15 +233,34 @@ footer a{color:var(–gold);text-decoration:none;font-weight:700}
       <div class="form-group"><label>الطول</label><input id="fh" type="number" placeholder="مثال: 162"></div>
       <div class="form-group"><label>الكتف</label><input id="fs" type="number" placeholder="مثال: 42"></div>
       <div class="form-group"><label>الصدر</label><input id="fc" type="number" placeholder="مثال: 96"></div>
-      <div class="form-group"><label>الخصر</label><input id="fw" type="number" placeholder="مثال: 80"></div>
-      <div class="form-group"><label>الورك</label><input id="fhi" type="number" placeholder="مثال: 100"></div>
+
+
       <div class="form-group"><label>طول الكم</label><input id="fsl" type="number" placeholder="مثال: 60"></div>
     </div>
+    <div class="form-group"><label>الدولة / المحافظة *</label><select id="floc">
+      <option value="">— اختاري —</option>
+      <optgroup label="🇴🇲 عُمان">
+        <option>مسقط</option><option>صلالة</option><option>صحار</option>
+        <option>نزوى</option><option>صور</option><option>البريمي</option>
+        <option>مطرح</option><option>محافظة أخرى في عُمان</option>
+      </optgroup>
+      <optgroup label="🇸🇦 السعودية">
+        <option>الرياض</option><option>جدة</option><option>الدمام</option>
+        <option>مكة المكرمة</option><option>المدينة المنورة</option><option>مدينة أخرى في السعودية</option>
+      </optgroup>
+      <optgroup label="🇦🇪 الإمارات">
+        <option>دبي</option><option>أبوظبي</option><option>الشارقة</option><option>مدينة أخرى في الإمارات</option>
+      </optgroup>
+      <optgroup label="🇰🇼 الكويت"><option>الكويت</option></optgroup>
+      <optgroup label="🇧🇭 البحرين"><option>المنامة</option></optgroup>
+      <optgroup label="🇶🇦 قطر"><option>الدوحة</option></optgroup>
+      <optgroup label="🌍 دول أخرى"><option>دولة أخرى</option></optgroup>
+    </select></div>
     <div class="form-group"><label>ملاحظات إضافية</label><textarea id="fno" rows="2" placeholder="أي تعديلات أو طلبات خاصة..."></textarea></div>
     <div class="sec-label">💳 طريقة الدفع</div>
     <div class="pay-box">
       <div class="pt">حوّلي المبلغ على رقم الهاتف</div>
-      <div class="pn">97733904</div>
+      <div class="pn">71170098</div>
       <div class="pb">Bliza Abaya — عُمان 🇴🇲</div>
       <div class="pa">29.000 ر.ع</div>
     </div>
@@ -268,7 +285,7 @@ const IMG = {
 };
 
 const PRODUCTS = [{"id": "BL-01", "name": "عباية كلاسيكية فاخرة", "desc": "حواف ذهبية رفيعة تعكس الفخامة · أزرار ذهبية منقوشة بشعار Bliza · تكحيلة جيوب ذهبية أنيقة · جيب داخلي عملي", "colors": [{"name": "أسود", "hex": "#1a1a1a"}, {"name": "كحلي", "hex": "#1e2d4a"}, {"name": "بيج", "hex": "#c8b89a"}, {"name": "زيتي", "hex": "#6b7c4e"}]}, {"id": "BL-02", "name": "عباية بتصميم ملون مزدوج", "desc": "لونين متناسقين بتفاصيل ذهبية · تكحيلة جيوب ذهبية · أزرار ذهبية منقوشة بشعار Bliza · تطريز ذهبي على الأكمام", "colors": [{"name": "موكا/أوف وايت", "hex": "#c8b89a"}, {"name": "أوف وايت/أسود", "hex": "#f5f0e8"}, {"name": "وردي/بيج", "hex": "#d4a5b0"}, {"name": "زيتي/بيج", "hex": "#6b7c4e"}]}, {"id": "BL-03", "name": "عباية بليسيه جانبية", "desc": "طبة بليسيه أثوية جانبية · أزرار ذهبية جانبية · تكحيلة جيوب ذهبية راقية · حركة انسيابية مميزة", "colors": [{"name": "كحلي", "hex": "#1e2d4a"}, {"name": "رمادي", "hex": "#8a8a8a"}, {"name": "وردي", "hex": "#d4a5b0"}, {"name": "أوف وايت", "hex": "#f5f0e8"}]}, {"id": "BL-04", "name": "عباية مفتوحة بطيقات", "desc": "طبات متصلة أنيقة · حواف ذهبية ناعمة · قماش خفيف منسدل · تطريز ذهبي ناعم", "colors": [{"name": "وردي ناعم", "hex": "#d4a5b0"}, {"name": "بيج", "hex": "#c8b89a"}, {"name": "موكا", "hex": "#8b6f5e"}, {"name": "أخضر زيتي", "hex": "#6b7c4e"}]}, {"id": "BL-05", "name": "عباية بجيوب بارزة", "desc": "جيوب بارزة عملية · أزرار ذهبية مثلوثة · تطريز ذهبي على الأكمام · تكحيلة جيوب ذهبية", "colors": [{"name": "أخضر زيتي", "hex": "#6b7c4e"}, {"name": "موكا", "hex": "#8b6f5e"}, {"name": "بيج", "hex": "#c8b89a"}]}, {"id": "BL-06", "name": "عباية بقصة حزام أنيق", "desc": "حزام أنيق للأبازار · تكحيلة جيوب ذهبية · أزرار ذهبية فاخرة · تطريز ذهبي ناعم", "colors": [{"name": "بيج", "hex": "#c8b89a"}, {"name": "موكا", "hex": "#8b6f5e"}, {"name": "كحلي", "hex": "#1e2d4a"}]}, {"id": "BL-07", "name": "عباية بخطوط ذهبية عمودية", "desc": "خطوط ذهبية عمودية راقية · تكحيلة الأكمام ذهبية · أزرار ذهبية ناعمة · لمسة ذهبية في الأمام", "colors": [{"name": "أسود", "hex": "#1a1a1a"}, {"name": "كحلي", "hex": "#1e2d4a"}, {"name": "رمادي", "hex": "#8a8a8a"}, {"name": "موكا", "hex": "#8b6f5e"}]}, {"id": "BL-08", "name": "عباية بأكمام واسعة وتطريز", "desc": "أكمام واسعة مريحة · تطريز ذهبي راقي · تكحيلة جيوب ذهبية · تطريز ذهبي ناعم", "colors": [{"name": "كحلي", "hex": "#1e2d4a"}, {"name": "أسود", "hex": "#1a1a1a"}, {"name": "زيتي", "hex": "#6b7c4e"}]}];
-const PHONE = "96897733904";
+const PHONE = "96871170098";
 let current = null, selColor = null;
 
 function renderProducts() {
@@ -304,7 +321,7 @@ function openModal(id) {
       <span>${c.name}</span>
     </div>`
   ).join("");
-  ["fn","fp","fh","fs","fc","fw","fhi","fsl","fno","ftr"].forEach(id => document.getElementById(id).value="");
+  ["fn","fp","fh","fs","fc","fsl","fno","ftr"].forEach(id => document.getElementById(id).value=""); document.getElementById("floc").value="";
   document.getElementById("overlay").classList.add("open");
   document.body.style.overflow = "hidden";
 }
@@ -339,8 +356,8 @@ function sendOrder() {
 الطول: ${document.getElementById("fh").value||"—"}
 الكتف: ${document.getElementById("fs").value||"—"}
 الصدر: ${document.getElementById("fc").value||"—"}
-الخصر: ${document.getElementById("fw").value||"—"}
-الورك: ${document.getElementById("fhi").value||"—"}
+
+
 طول الكم: ${document.getElementById("fsl").value||"—"}
 
 *💳 رقم التحويل:* ${document.getElementById("ftr").value||"سيتم الإرسال"}
@@ -351,8 +368,18 @@ _تم الطلب عبر موقع Bliza Abaya_`;
   closeModal();
 }
 
+function showPay(type) {
+  document.getElementById('payOman').style.display = type==='oman' ? 'block' : 'none';
+  document.getElementById('payGulf').style.display = type==='gulf' ? 'block' : 'none';
+  document.getElementById('btnOman').style.background = type==='oman' ? 'var(--brand)' : '#fff';
+  document.getElementById('btnOman').style.color = type==='oman' ? '#fff' : 'var(--brand)';
+  document.getElementById('btnOman').style.borderColor = type==='oman' ? 'var(--brand)' : 'var(--border)';
+  document.getElementById('btnGulf').style.background = type==='gulf' ? 'var(--brand)' : '#fff';
+  document.getElementById('btnGulf').style.color = type==='gulf' ? '#fff' : 'var(--brand)';
+  document.getElementById('btnGulf').style.borderColor = type==='gulf' ? 'var(--brand)' : 'var(--border)';
+}
+
 renderProducts();
 </script>
-
 </body>
 </html>
