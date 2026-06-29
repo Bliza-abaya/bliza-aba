@@ -301,7 +301,7 @@
 <footer>
   <div class="lm">Bliza</div>
   <div class="ls">ABAYA</div>
-  <p>للتواصل: <a href="https://wa.me/96871170098">+968 7117 0098 :واتساب</a></p>
+  <p>للتواصل: <a href="https://wa.me/96871170098">واتساب: ‎+968 7117 0098</a></p>
   <p style="margin-top:6px">© 2025 Bliza Abaya — جميع الحقوق محفوظة</p>
 </footer>
 
@@ -556,16 +556,118 @@ function updateCartBadge() {
 }
 
 function quickAddCart(productId) {
+  // Open color picker modal for this product
+  openAddToCartModal(productId);
+}
+
+function openAddToCartModal(productId) {
   const p = PRODUCTS.find(x => x.id === productId);
-  cart.push({ product: p, color: p.colors[0].name, colorHex: p.colors[0].hex,
-    qty: 1, id: Date.now() });
+  
+  // Create mini modal
+  const overlay = document.createElement('div');
+  overlay.id = 'miniCartOverlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(28,15,27,.6);z-index:800;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)';
+  
+  overlay.innerHTML = `
+    <div style="background:#fff;border-radius:24px 24px 0 0;width:100%;max-width:520px;padding:24px 20px 36px;direction:rtl;font-family:inherit">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <div style="font-size:17px;font-weight:800;color:#4A1942">اختاري اللون 🎨</div>
+        <button onclick="document.getElementById('miniCartOverlay').remove();document.body.style.overflow=''" 
+          style="background:#f0e8ef;border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;color:#4A1942">✕</button>
+      </div>
+      
+      <div style="display:flex;gap:12px;align-items:center;background:#faf6f9;border-radius:12px;padding:12px;margin-bottom:18px">
+        <img src="${IMG[p.id]}" style="width:60px;height:78px;border-radius:8px;object-fit:cover;object-position:top">
+        <div>
+          <div style="font-size:11px;color:#C8A951;font-weight:700;letter-spacing:2px">${p.id}</div>
+          <div style="font-size:14px;font-weight:800;color:#4A1942">${p.name}</div>
+          <div style="font-size:16px;font-weight:900;color:#4A1942;margin-top:4px">29.000 ر.ع</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:18px">
+        <div style="font-size:12px;font-weight:700;color:#8A7A85;margin-bottom:10px">اختاري اللون:</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap" id="miniColorOpts">
+          ${p.colors.map((c,i) => `
+            <div onclick="selectMiniColor(${i}, this, '${c.name}', '${c.hex}')" 
+              style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer" class="mini-color-opt">
+              <div style="width:34px;height:34px;border-radius:50%;background:${c.hex};border:3px solid #E8DDD6;transition:all .15s"></div>
+              <span style="font-size:9px;color:#8A7A85;font-weight:600;text-align:center;max-width:44px">${c.name}</span>
+            </div>`).join('')}
+        </div>
+      </div>
+
+      <div id="miniSelectedColor" style="display:none;background:#f5f0ea;border-radius:10px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:#4A1942;font-weight:600"></div>
+
+      <button id="miniAddBtn" onclick="confirmAddToCart('${p.id}')" disabled
+        style="width:100%;padding:14px;background:#ccc;color:#fff;border:none;border-radius:12px;
+        font-size:15px;font-weight:800;cursor:not-allowed;font-family:inherit;transition:all .2s">
+        اختاري لوناً أولاً
+      </button>
+      
+      <button onclick="document.getElementById('miniCartOverlay').remove();document.body.style.overflow='';openCart()" 
+        style="width:100%;padding:12px;background:transparent;color:#4A1942;border:1.5px solid #E8DDD6;
+        border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px">
+        🛒 شوفي السلة (${cart.length} عباية)
+      </button>
+    </div>`;
+  
+  document.body.appendChild(overlay);
+  document.body.style.overflow = 'hidden';
+  overlay.onclick = (e) => { if(e.target === overlay) { overlay.remove(); document.body.style.overflow=''; } };
+  
+  window._miniProduct = p;
+  window._miniSelectedColor = null;
+}
+
+function selectMiniColor(idx, el, colorName, colorHex) {
+  window._miniSelectedColor = { name: colorName, hex: colorHex };
+  
+  // Update UI
+  document.querySelectorAll('.mini-color-opt div:first-child').forEach(d => {
+    d.style.borderColor = '#E8DDD6';
+    d.style.transform = 'scale(1)';
+  });
+  el.querySelector('div').style.borderColor = '#C8A951';
+  el.querySelector('div').style.transform = 'scale(1.2)';
+  
+  // Show selected
+  const sel = document.getElementById('miniSelectedColor');
+  sel.style.display = 'block';
+  sel.innerHTML = `<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:${colorHex};margin-left:6px;vertical-align:middle"></span> اللون المختار: <strong>${colorName}</strong>`;
+  
+  // Enable button
+  const btn = document.getElementById('miniAddBtn');
+  btn.disabled = false;
+  btn.style.background = '#4A1942';
+  btn.style.cursor = 'pointer';
+  btn.textContent = '✅ أضيفي للسلة';
+}
+
+function confirmAddToCart(productId) {
+  if (!window._miniSelectedColor) return;
+  const p = PRODUCTS.find(x => x.id === productId);
+  
+  cart.push({
+    product: p,
+    color: window._miniSelectedColor.name,
+    colorHex: window._miniSelectedColor.hex,
+    qty: 1,
+    id: Date.now()
+  });
+  
   updateCartBadge();
-  // Show mini toast
+  
+  // Close mini modal
+  const overlay = document.getElementById('miniCartOverlay');
+  if (overlay) { overlay.remove(); document.body.style.overflow = ''; }
+  
+  // Show toast
   const t = document.createElement('div');
-  t.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#4A1942;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:9999;font-family:inherit';
-  t.textContent = '✅ أضيفت للسلة!';
+  t.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#4A1942;color:#fff;padding:12px 24px;border-radius:30px;font-size:13px;font-weight:700;z-index:9999;font-family:inherit;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(0,0,0,.3)';
+  t.innerHTML = `✅ أضيفت للسلة! <span style="background:rgba(255,255,255,.2);padding:2px 8px;border-radius:10px">${cart.length} عباية</span>`;
   document.body.appendChild(t);
-  setTimeout(() => t.remove(), 2000);
+  setTimeout(() => t.remove(), 2500);
 }
 
 function openCart() {
