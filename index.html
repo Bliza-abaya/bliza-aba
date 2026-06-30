@@ -38,11 +38,14 @@
     box-shadow:0 4px 20px rgba(200,169,81,.4);transition:transform .2s}
   .hero-cta:hover{transform:translateY(-2px)}
 
-  .features{background:var(--white);display:flex;justify-content:center;flex-wrap:wrap;
+  .features{background:var(--white);display:grid;grid-template-columns:1fr 1fr;
     border-bottom:1px solid var(--border)}
-  .fi{display:flex;align-items:center;gap:7px;padding:12px 20px;font-size:11px;
-    font-weight:600;color:var(--gray);border-left:1px solid var(--border)}
-  .fi:last-child{border-left:none}
+  .fi{display:flex;align-items:center;justify-content:center;gap:7px;
+    padding:14px 12px;font-size:11px;font-weight:600;color:var(--gray);
+    border-bottom:1px solid var(--border);border-left:1px solid var(--border);
+    text-align:center}
+  .fi:nth-child(odd){border-left:none}
+  .fi:nth-child(3),.fi:nth-child(4){border-bottom:none}
 
   .sec-title{text-align:center;padding:44px 20px 28px}
   .eyebrow{font-size:10px;font-weight:700;color:var(--gold);letter-spacing:4px;
@@ -255,21 +258,17 @@
           🌸 تسوّقي الآن
         </a>
       </div>
-      <div class="hero-stats">
-        <div class="hstat"><div class="hstat-num">8+</div><div class="hstat-label">موديلات</div></div>
-        <div class="hstat-div"></div>
-        <div class="hstat"><div class="hstat-num">100%</div><div class="hstat-label">خياطة يدوية</div></div>
-        <div class="hstat-div"></div>
-        <div class="hstat"><div class="hstat-num">🇴🇲</div><div class="hstat-label">صنع في عُمان</div></div>
+      </div>
+        
+        </div>
+        
+        </div>
       </div>
     </div>
 
   </div>
 
-  <div class="scroll-hint">
-    <div class="scroll-mouse"><div class="scroll-wheel"></div></div>
-    <span>مرّري للأسفل</span>
-  </div>
+
 </section>
 
 <div class="features">
@@ -363,10 +362,15 @@
       <div class="pa">29.000 ر.ع</div>
     </div>
     <div class="form-group"><label>رقم عملية التحويل (اختياري)</label><input id="ftr" placeholder="للتسريع في تأكيد طلبك"></div>
-    <button class="wa-btn" onclick="sendOrder()">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.553 4.116 1.522 5.847L.057 23.882l6.186-1.438A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.011-1.374l-.36-.213-3.722.864.935-3.614-.234-.371A9.818 9.818 0 1112 21.818z"/></svg>
-      أرسلي طلبك عبر واتساب
-    </button>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button class="wa-btn" style="background:var(--brand)" onclick="addToCartFromModal()">
+        🛒 أضيفي للسلة وأكملي التسوق
+      </button>
+      <button class="wa-btn" onclick="sendOrder()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.553 4.116 1.522 5.847L.057 23.882l6.186-1.438A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.011-1.374l-.36-.213-3.722.864.935-3.614-.234-.371A9.818 9.818 0 1112 21.818z"/></svg>
+        أرسلي هذا الطلب فقط عبر واتساب
+      </button>
+    </div>
   </div>
 </div>
 
@@ -661,6 +665,32 @@ function confirmAddToCart(productId) {
   // Close mini modal
   const overlay = document.getElementById('miniCartOverlay');
   if (overlay) { overlay.remove(); document.body.style.overflow = ''; }
+  
+  // Show toast
+  const t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#4A1942;color:#fff;padding:12px 24px;border-radius:30px;font-size:13px;font-weight:700;z-index:9999;font-family:inherit;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(0,0,0,.3)';
+  t.innerHTML = `✅ أضيفت للسلة! <span style="background:rgba(255,255,255,.2);padding:2px 8px;border-radius:10px">${cart.length} عباية</span>`;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
+}
+
+
+function addToCartFromModal() {
+  if (!selColor) { alert('يرجى اختيار اللون'); return; }
+  
+  // Add to cart with product info
+  cart.push({
+    product: current,
+    color: selColor.name,
+    colorHex: selColor.hex,
+    qty: 1,
+    id: Date.now()
+  });
+  
+  updateCartBadge();
+  
+  // Close modal
+  closeModalDirect();
   
   // Show toast
   const t = document.createElement('div');
