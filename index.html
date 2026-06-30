@@ -597,8 +597,12 @@ function quickAddCart(productId) {
   openAddToCartModal(productId);
 }
 
+// Saved measurements (persist across products in same session)
+let savedMeasurements = { height:'', shoulder:'', chest:'', sleeve:'' };
+
 function openAddToCartModal(productId) {
   const p = PRODUCTS.find(x => x.id === productId);
+  const hasMeasurements = savedMeasurements.height || savedMeasurements.shoulder || savedMeasurements.chest || savedMeasurements.sleeve;
   
   // Create mini modal
   const overlay = document.createElement('div');
@@ -606,9 +610,9 @@ function openAddToCartModal(productId) {
   overlay.style.cssText = 'position:fixed;inset:0;background:rgba(28,15,27,.6);z-index:800;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)';
   
   overlay.innerHTML = `
-    <div style="background:#fff;border-radius:24px 24px 0 0;width:100%;max-width:520px;padding:24px 20px 36px;direction:rtl;font-family:inherit">
+    <div style="background:#fff;border-radius:24px 24px 0 0;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;padding:24px 20px 36px;direction:rtl;font-family:inherit">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-        <div style="font-size:17px;font-weight:800;color:#4A1942">اختاري اللون 🎨</div>
+        <div style="font-size:17px;font-weight:800;color:#4A1942">إضافة للسلة 🛒</div>
         <button onclick="document.getElementById('miniCartOverlay').remove();document.body.style.overflow=''" 
           style="background:#f0e8ef;border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;color:#4A1942">✕</button>
       </div>
@@ -623,7 +627,7 @@ function openAddToCartModal(productId) {
       </div>
 
       <div style="margin-bottom:18px">
-        <div style="font-size:12px;font-weight:700;color:#8A7A85;margin-bottom:10px">اختاري اللون:</div>
+        <div style="font-size:12px;font-weight:700;color:#8A7A85;margin-bottom:10px">اختاري اللون: *</div>
         <div style="display:flex;gap:10px;flex-wrap:wrap" id="miniColorOpts">
           ${p.colors.map((c,i) => `
             <div onclick="selectMiniColor(${i}, this, '${c.name}', '${c.hex}')" 
@@ -636,10 +640,25 @@ function openAddToCartModal(productId) {
 
       <div id="miniSelectedColor" style="display:none;background:#f5f0ea;border-radius:10px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:#4A1942;font-weight:600"></div>
 
-      <button id="miniAddBtn" onclick="confirmAddToCart('${p.id}')" disabled
-        style="width:100%;padding:14px;background:#ccc;color:#fff;border:none;border-radius:12px;
-        font-size:15px;font-weight:800;cursor:not-allowed;font-family:inherit;transition:all .2s">
-        اختاري لوناً أولاً
+      <div style="margin-bottom:8px;display:flex;align-items:center;justify-content:space-between">
+        <div style="font-size:12px;font-weight:700;color:#8A7A85">📏 القياسات (سم):</div>
+        ${hasMeasurements ? '<span style="font-size:10px;color:#16a34a;font-weight:700">✓ محفوظة من قبل</span>' : ''}
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+        <input id="miniHeight" type="number" placeholder="الطول" value="${savedMeasurements.height}"
+          style="padding:9px 12px;border-radius:10px;border:1.5px solid #E8DDD6;font-size:13px;direction:rtl;font-family:inherit">
+        <input id="miniShoulder" type="number" placeholder="الكتف" value="${savedMeasurements.shoulder}"
+          style="padding:9px 12px;border-radius:10px;border:1.5px solid #E8DDD6;font-size:13px;direction:rtl;font-family:inherit">
+        <input id="miniChest" type="number" placeholder="الصدر" value="${savedMeasurements.chest}"
+          style="padding:9px 12px;border-radius:10px;border:1.5px solid #E8DDD6;font-size:13px;direction:rtl;font-family:inherit">
+        <input id="miniSleeve" type="number" placeholder="طول الكم" value="${savedMeasurements.sleeve}"
+          style="padding:9px 12px;border-radius:10px;border:1.5px solid #E8DDD6;font-size:13px;direction:rtl;font-family:inherit">
+      </div>
+
+      <button id="miniAddBtn" onclick="confirmAddToCart('${p.id}')" ${hasMeasurements ? '' : 'disabled'}
+        style="width:100%;padding:14px;background:${hasMeasurements ? '#4A1942' : '#ccc'};color:#fff;border:none;border-radius:12px;
+        font-size:15px;font-weight:800;cursor:${hasMeasurements ? 'pointer' : 'not-allowed'};font-family:inherit;transition:all .2s">
+        ${hasMeasurements ? 'اختاري لوناً ✦' : 'اختاري لوناً أولاً'}
       </button>
       
       <button onclick="document.getElementById('miniCartOverlay').remove();document.body.style.overflow='';openCart()" 
@@ -673,7 +692,7 @@ function selectMiniColor(idx, el, colorName, colorHex) {
   sel.style.display = 'block';
   sel.innerHTML = `<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:${colorHex};margin-left:6px;vertical-align:middle"></span> اللون المختار: <strong>${colorName}</strong>`;
   
-  // Enable button
+  // Enable button (color selected = enough to proceed, measurements are optional but encouraged)
   const btn = document.getElementById('miniAddBtn');
   btn.disabled = false;
   btn.style.background = '#4A1942';
@@ -685,12 +704,19 @@ function confirmAddToCart(productId) {
   if (!window._miniSelectedColor) return;
   const p = PRODUCTS.find(x => x.id === productId);
   
+  // Save measurements for next products
+  savedMeasurements.height   = document.getElementById('miniHeight').value;
+  savedMeasurements.shoulder = document.getElementById('miniShoulder').value;
+  savedMeasurements.chest    = document.getElementById('miniChest').value;
+  savedMeasurements.sleeve   = document.getElementById('miniSleeve').value;
+  
   cart.push({
     product: p,
     color: window._miniSelectedColor.name,
     colorHex: window._miniSelectedColor.hex,
     qty: 1,
-    id: Date.now()
+    id: Date.now(),
+    measurements: { ...savedMeasurements }
   });
   
   updateCartBadge();
@@ -832,9 +858,15 @@ function sendCartOrder() {
   if (!loc) { alert('يرجى اختيار الموقع / المحافظة'); return; }
 
   const total = cart.length * 29;
-  const itemsList = cart.map((item, i) =>
-    `${i+1}. ${item.product.id} — ${item.product.name} · اللون: ${item.color}`
-  ).join('\n');
+  const itemsList = cart.map((item, i) => {
+    const m = item.measurements || {};
+    const hasOwnMeasurements = m.height || m.shoulder || m.chest || m.sleeve;
+    let line = `${i+1}. ${item.product.id} — ${item.product.name} · اللون: ${item.color}`;
+    if (hasOwnMeasurements) {
+      line += `\n   📏 الطول:${m.height||'—'} الكتف:${m.shoulder||'—'} الصدر:${m.chest||'—'} الكم:${m.sleeve||'—'}`;
+    }
+    return line;
+  }).join('\n');
 
   const msg = `🌸 *طلب جديد - Bliza Abaya*
 
@@ -848,12 +880,6 @@ ${itemsList}
 الهاتف: ${phone}
 الموقع: ${loc}
 
-*📏 القياسات (سم):*
-الطول: ${document.getElementById('cfh').value||'—'}
-الكتف: ${document.getElementById('cfs').value||'—'}
-الصدر: ${document.getElementById('cfc').value||'—'}
-طول الكم: ${document.getElementById('cfsl').value||'—'}
-
 *💳 رقم التحويل:* ${document.getElementById('cftr').value||'سيتم الإرسال'}
 ${document.getElementById('cfno').value ? '*ملاحظات:* '+document.getElementById('cfno').value : ''}
 
@@ -861,6 +887,7 @@ _تم الطلب عبر موقع Bliza Abaya_`;
 
   window.open(`https://wa.me/96871170098?text=${encodeURIComponent(msg)}`, '_blank');
   cart = [];
+  savedMeasurements = { height:'', shoulder:'', chest:'', sleeve:'' };
   updateCartBadge();
   closeCheckout();
 }
@@ -919,13 +946,6 @@ renderProducts();
       <optgroup label="🌍 دول أخرى"><option>دولة أخرى</option></optgroup>
     </select></div>
 
-    <div class="sec-label">📏 القياسات (سم)</div>
-    <div class="mgrid">
-      <div class="form-group"><label>الطول</label><input id="cfh" type="number" placeholder="162"></div>
-      <div class="form-group"><label>الكتف</label><input id="cfs" type="number" placeholder="42"></div>
-      <div class="form-group"><label>الصدر</label><input id="cfc" type="number" placeholder="96"></div>
-      <div class="form-group"><label>طول الكم</label><input id="cfsl" type="number" placeholder="60"></div>
-    </div>
     <div class="form-group"><label>ملاحظات</label>
       <textarea id="cfno" rows="2" placeholder="أي تعديلات أو طلبات خاصة..."></textarea>
     </div>
@@ -953,9 +973,12 @@ renderProducts();
     <div id="cpayGulf" class="pay-box" style="display:none">
       <div class="pt">تحويل بنكي دولي</div>
       <div style="font-size:13px;color:var(--brand);margin:8px 0;font-weight:700">Bank Muscat 🇴🇲</div>
-      <div style="font-size:12px;color:var(--gray);line-height:2">
-        IBAN: <strong>أضيفي رقم IBAN هنا</strong><br>
-        اسم صاحب الحساب: <strong>Bliza Abaya</strong>
+      <div style="font-size:12px;color:var(--gray);line-height:2;text-align:left;direction:ltr">
+        Beneficiary Name: <strong>Huda Al-Abri</strong><br>
+        Bank Name: <strong>Bank Muscat</strong><br>
+        IBAN: <strong>OM27 0270 4540 4157 5850 025</strong><br>
+        SWIFT Code: <strong>BMUSOMRX</strong><br>
+        Country: <strong>Oman</strong>
       </div>
       <div class="pa" id="cTotalAmount2">29.000 ر.ع</div>
     </div>
